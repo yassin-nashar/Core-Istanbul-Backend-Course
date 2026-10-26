@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Non-blocking — readFile</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Node.js · fs</p>
+      <h1>Non-blocking</h1>
+      <p class="lead">
+        <code>readFile</code> يطلب القراءة ويرجع فوراً. السطر اللي بعده يشتغل
+        قبل ما يوصل محتوى الملف، والنتيجة تنطبع جوا الـ callback.
+      </p>
+
+      <section>
+        <h2>الكود</h2>
+        <pre dir="ltr"><code>import { readFile } from "node:fs";
+
+console.log("1. Start");
+
+readFile("data.txt", "utf8", (error) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  console.log("3. File loaded");
+});
+
+console.log("2. Continue working");</code></pre>
+        <p class="file">nonblocking-demo.mjs</p>
+      </section>
+
+      <section>
+        <h2>الناتج</h2>
+        <pre class="out" dir="ltr"><code>1. Start
+2. Continue working
+3. File loaded</code></pre>
+        <p>
+          «Continue working» انطبع قبل «File loaded»، لأن القراءة صارت بالخلفية
+          والكود اللي بعدها ما استناها.
+        </p>
+      </section>
+
+      <nav>
+        <a href="blocking.html">Blocking</a>
+        <a href="index.html">الصفحتين</a>
+      </nav>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blocking — readFileSync</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Node.js · fs</p>
+      <h1>Blocking</h1>
+      <p class="lead">
+        <code>readFileSync</code> يوقف تنفيذ الملف لين تخلص قراءة
+        <code>data.txt</code>. السطر اللي بعده ما يشتغل إلا بعد ما ترجع القراءة.
+      </p>
+
+      <section>
+        <h2>الكود</h2>
+        <pre dir="ltr"><code>import { readFileSync } from "node:fs";
+
+console.log("1. Start");
+
+readFileSync("data.txt", "utf8");
+
+console.log("2. File loaded");
+console.log("3. Continue working");</code></pre>
+        <p class="file">blocking-demo.mjs</p>
+      </section>
+
+      <section>
+        <h2>الناتج</h2>
+        <pre class="out" dir="ltr"><code>1. Start
+2. File loaded
+3. Continue working</code></pre>
+        <p>
+          الترتيب من فوق لتحت: البداية، ثم تحميل الملف، ثم متابعة الشغل.
+          الخيط وقف عند <code>readFileSync</code> وما كمل إلا بعده.
+        </p>
+      </section>
+
+      <nav>
+        <a href="index.html">الصفحتين</a>
+        <a href="nonblocking.html">Non-blocking</a>
+      </nav>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+:root {
+  color-scheme: light;
+  --ink: #1c1915;
+  --muted: #5c564c;
+  --line: #e4dccf;
+  --paper: #f6f1e8;
+  --card: #fffdf8;
+  --accent: #9a3412;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  line-height: 1.7;
+}
+
+main {
+  width: min(720px, calc(100% - 32px));
+  margin: 48px auto 64px;
+}
+
+.kicker {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 2rem;
+  line-height: 1.25;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+.lead,
+p {
+  color: var(--muted);
+}
+
+.lead {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+section {
+  margin-top: 28px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: #231f1a;
+  color: #f6f1e8;
+  border-radius: 8px;
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+pre.out {
+  background: #14261c;
+}
+
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+}
+
+.file {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+}
+
+nav,
+.pages {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 0;
+  list-style: none;
+}
+
+nav a,
+.pages a {
+  display: block;
+  padding: 12px 16px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.pages {
+  flex-direction: column;
+}
+
+.pages a strong {
+  display: block;
+}
+
+.pages a span {
+  color: var(--muted);
+}
+
+nav a:hover,
+.pages a:hover {
+  border-color: var(--accent);
+}
