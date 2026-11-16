@@ -1,0 +1,5 @@
+node_modules/
+dist/
+instructor-only/dist/
+npm-debug.log*
+.DS_Store
