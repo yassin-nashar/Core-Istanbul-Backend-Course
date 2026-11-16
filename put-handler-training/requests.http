@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:3000
+
+### 1. GET task before the update
+GET {{baseUrl}}/tasks/3
+
+### 2. PUT with a missing title
+PUT {{baseUrl}}/tasks/3
+Content-Type: application/json
+
+{
+  "completed": true
+}
+
+### 3. GET task after the update
+GET {{baseUrl}}/tasks/3
