@@ -1,0 +1,142 @@
+{
+  "info": {
+    "_postman_id": "1b07cf6d-d677-4eb9-b660-1336bf240c8d",
+    "name": "Session 3 - Task Management API",
+    "description": "Run the requests in order after starting the API with npm start.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET /tasks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    },
+    {
+      "name": "POST /tasks (valid title)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Learn REST\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    },
+    {
+      "name": "POST /tasks (empty title)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks"]
+        }
+      }
+    },
+    {
+      "name": "GET /tasks/999999",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/tasks/999999",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "999999"]
+        }
+      }
+    },
+    {
+      "name": "GET /tasks/1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/tasks/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "1"]
+        }
+      }
+    },
+    {
+      "name": "PATCH /tasks/1",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"completed\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "1"]
+        }
+      }
+    },
+    {
+      "name": "DELETE /tasks/1",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/tasks/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["tasks", "1"]
+        }
+      }
+    }
+  ]
+}
