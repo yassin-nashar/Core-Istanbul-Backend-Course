@@ -13,3 +13,7 @@ A minimal Express 5 backend configured with strict TypeScript, NodeNext ESM, and
 ### express-logging-middleware
 
 An extension of the minimal Express TypeScript backend that adds inline request logging and a `/status` endpoint. It demonstrates middleware ordering while keeping the original root route and the one-file application structure.
+
+### express-ticket-validation
+
+A continuation of the logging project that adds health reporting, Zod-validated ticket creation, centralized error handling, and validated PORT configuration. It remains a one-file learning backend with no database, authentication, or CRUD layers.
