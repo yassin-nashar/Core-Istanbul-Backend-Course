@@ -9,3 +9,7 @@ Each new project added to this branch should also be listed here with a short tw
 ### minimal-express-typescript
 
 A minimal Express 5 backend configured with strict TypeScript, NodeNext ESM, and tsx. It demonstrates separate development, type-checking, build, and production-style start commands around a single JSON endpoint.
+
+### express-logging-middleware
+
+An extension of the minimal Express TypeScript backend that adds inline request logging and a `/status` endpoint. It demonstrates middleware ordering while keeping the original root route and the one-file application structure.
