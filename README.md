@@ -17,3 +17,7 @@ An extension of the minimal Express TypeScript backend that adds inline request 
 ### express-ticket-validation
 
 A continuation of the logging project that adds health reporting, Zod-validated ticket creation, centralized error handling, and validated PORT configuration. It remains a one-file learning backend with no database, authentication, or CRUD layers.
+
+### support-ticket-crud-api
+
+A structured continuation that separates the Express app into routes, controllers, and an in-memory service while implementing full Support Ticket CRUD behavior. It demonstrates strict create/update validation, consistent errors, generated IDs and timestamps, and preserves the system endpoints and environment configuration.
