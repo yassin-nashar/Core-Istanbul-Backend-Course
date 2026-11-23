@@ -75,6 +75,16 @@ describe("ticket CRUD", () => {
 });
 
 describe("ticket validation", () => {
+  it("returns 400 for malformed JSON", async () => {
+    const response = await request(app)
+      .post("/api/tickets")
+      .set("Content-Type", "application/json")
+      .send('{"title":');
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: { message: "Invalid JSON body" } });
+  });
+
   it.each([
     { title: "   ", description: "Valid description" },
     { title: "Valid title", description: "   " },

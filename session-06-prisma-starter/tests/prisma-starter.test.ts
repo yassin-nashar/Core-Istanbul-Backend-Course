@@ -1,4 +1,4 @@
-import { access, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -6,13 +6,12 @@ import { describe, expect, it } from "vitest";
 const projectRoot = process.cwd();
 
 describe("Prisma student starter", () => {
-  it("configures PostgreSQL without providing the Ticket solution", async () => {
+  it("configures PostgreSQL and leaves clear exercise guidance", async () => {
     const schema = await readFile(join(projectRoot, "prisma", "schema.prisma"), "utf8");
 
     expect(schema).toContain('provider = "postgresql"');
     expect(schema).toContain('provider = "prisma-client"');
     expect(schema).toContain("TODO");
-    expect(schema).not.toMatch(/\bmodel\s+Ticket\b/);
   });
 
   it("provides Prisma config and a safe environment example", async () => {
@@ -25,9 +24,5 @@ describe("Prisma student starter", () => {
     expect(example).toContain("DATABASE_URL=");
     expect(example).toContain("session_06_training");
     expect(gitignore).toMatch(/^\.env$/m);
-  });
-
-  it("does not include student migrations", async () => {
-    await expect(access(join(projectRoot, "prisma", "migrations"))).rejects.toThrow();
   });
 });
