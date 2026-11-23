@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Session 6 classroom starter for Prisma ORM and PostgreSQL",
   "type": "module",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
@@ -38,5 +38,8 @@
   },
   "optionalDependencies": {
     "@rolldown/binding-win32-x64-msvc": "^1.2.19"
+  },
+  "overrides": {
+    "effect": "3.22.1"
   }
 }
