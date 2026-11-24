@@ -2,9 +2,11 @@ import request from "supertest";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { createApp } from "../src/app.js";
+import { prisma } from "../src/lib/prisma.js";
 let app = createApp();
 
-beforeEach(() => {
+beforeEach(async () => {
+  await prisma.ticket.deleteMany();
   app = createApp();
 });
 

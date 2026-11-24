@@ -1,6 +1,5 @@
 import type { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
-import { Prisma } from "../generated/prisma/client.js";
 
 export class AppError extends Error {
   constructor(
@@ -32,11 +31,6 @@ export const errorHandler: ErrorRequestHandler = (error, _request, response, _ne
 
   if (error instanceof AppError) {
     response.status(error.statusCode).json({ error: { message: error.message } });
-    return;
-  }
-
-  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-    response.status(404).json({ error: { message: "Ticket not found" } });
     return;
   }
 

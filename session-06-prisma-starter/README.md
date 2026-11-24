@@ -1,14 +1,6 @@
 # Session 06 — Prisma Starter
 
-This complete reference solution uses Prisma ORM 7, the PostgreSQL driver adapter, and PostgreSQL persistence while preserving the Support Ticket API contract from the previous session.
-
-## Learning objectives
-
-- Map a Prisma model to PostgreSQL with migrations.
-- Use a shared Prisma Client through the PostgreSQL driver adapter.
-- Replace in-memory CRUD with asynchronous database operations.
-- Validate request bodies, route IDs, and filtering queries with Zod.
-- Translate missing database records into stable HTTP errors.
+This classroom project keeps the Support Ticket API from the previous session in memory while preparing Prisma ORM for a PostgreSQL exercise. During class, students will define the database model and create their first migration. Database integration comes in the next teaching block.
 
 ## Prerequisites
 
@@ -121,16 +113,11 @@ More requests are available in `http/tickets.http` and the Postman collection un
 npm run prisma:generate
 npm run prisma:migrate -- --name init
 npm run prisma:studio
-npm run seed
 ```
 
 Prisma 7 reads the connection URL from `prisma.config.ts`. That file loads your local `.env`; the URL is intentionally not stored in `schema.prisma`.
 
-The complete solution already contains the `Ticket` model and initial migration. Use `npm run seed` to upsert ten sample tickets without deleting existing data.
-
-## From In-Memory Storage to Prisma
-
-The routes and controllers stayed the same, while the service now calls asynchronous Prisma CRUD methods. One shared Prisma Client uses a PostgreSQL connection pool. Migrations turn the model into reviewable SQL, and missing records become 404 responses. The API contract and string UUID IDs remain unchanged. A Repository Layer is intentionally not introduced in this focused exercise.
+The student schema intentionally has no `Ticket` model and no migration. Follow [EXERCISE.md](EXERCISE.md) to add them.
 
 ## Student and instructor branches
 

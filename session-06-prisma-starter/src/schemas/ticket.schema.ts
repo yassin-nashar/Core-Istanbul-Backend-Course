@@ -25,8 +25,3 @@ export const updateTicketSchema = z
   .refine((input) => Object.keys(input).length > 0, {
     message: "Provide at least one field to update",
   });
-
-export const ticketFilterSchema = z.object({
-  status: z.enum(ticketStatuses).optional(),
-  priority: z.enum(ticketPriorities).optional(),
-});

@@ -15,3 +15,4 @@ export interface Ticket {
 
 export type CreateTicketInput = Pick<Ticket, "title" | "description" | "status" | "priority">;
 export type UpdateTicketInput = Partial<CreateTicketInput>;
+export type TicketFilters = { status?: TicketStatus; priority?: TicketPriority };

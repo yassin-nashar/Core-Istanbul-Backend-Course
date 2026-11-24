@@ -7,23 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum TicketStatus {
-  open
-  in_progress
-  resolved
-}
-
-enum TicketPriority {
-  low
-  medium
-  high
-}
-
-model Ticket {
-  id          String         @id @default(uuid())
-  title       String
-  description String
-  status      TicketStatus   @default(open)
-  priority    TicketPriority @default(medium)
-  createdAt   DateTime       @default(now())
-}
+// TODO: During the exercise, define the Ticket model here.
+// Use the approved API fields and decide which Prisma types and defaults
+// correctly represent server-generated values, status, and priority.
