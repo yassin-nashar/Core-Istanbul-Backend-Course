@@ -1,0 +1,23 @@
+{
+  "info": { "name": "Session 06 Complete Ticket API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "ticketId", "value": "replace-after-create" }
+  ],
+  "item": [
+    { "name": "Create valid ticket", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Login issue\",\"description\":\"Cannot sign in\",\"priority\":\"high\"}" }, "url": "{{baseUrl}}/api/tickets" } },
+    { "name": "Create default ticket", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Default ticket\",\"description\":\"Uses defaults\"}" }, "url": "{{baseUrl}}/api/tickets" } },
+    { "name": "List all", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+    { "name": "Get one", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } },
+    { "name": "Update ticket", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"status\":\"in_progress\"}" }, "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } },
+    { "name": "Partial update", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"priority\":\"low\"}" }, "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } },
+    { "name": "Delete ticket", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } },
+    { "name": "Get nonexistent", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets/00000000-0000-4000-8000-000000000000" } },
+    { "name": "Update nonexistent", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"status\":\"resolved\"}" }, "url": "{{baseUrl}}/api/tickets/00000000-0000-4000-8000-000000000000" } },
+    { "name": "Delete nonexistent", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/tickets/00000000-0000-4000-8000-000000000000" } },
+    { "name": "Invalid request", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\" \"}" }, "url": "{{baseUrl}}/api/tickets" } },
+    { "name": "Invalid enum", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Bad\",\"description\":\"Bad\",\"status\":\"closed\"}" }, "url": "{{baseUrl}}/api/tickets" } },
+    { "name": "Invalid route id", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets/not-a-uuid" } },
+    { "name": "Filter status and priority", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets?status=open&priority=high" } }
+  ]
+}

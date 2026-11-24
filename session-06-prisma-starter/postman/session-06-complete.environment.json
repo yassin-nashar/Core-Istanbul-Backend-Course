@@ -1,0 +1,7 @@
+{
+  "name": "Session 06 Complete Local",
+  "values": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "enabled": true },
+    { "key": "ticketId", "value": "replace-after-create", "enabled": true }
+  ]
+}

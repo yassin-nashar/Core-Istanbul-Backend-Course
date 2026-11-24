@@ -4,33 +4,35 @@ import {
   createTicketSchema,
   ticketIdSchema,
   updateTicketSchema,
+  ticketFilterSchema,
 } from "../schemas/ticket.schema.js";
 import type { TicketService } from "../services/ticket.service.js";
 
 export function createTicketController(service: TicketService) {
-  const list: RequestHandler = (_request, response) => {
-    response.status(200).json(service.listTickets());
+  const list: RequestHandler = async (request, response) => {
+    const filters = ticketFilterSchema.parse(request.query);
+    response.status(200).json(await service.listTickets(filters));
   };
 
-  const getById: RequestHandler = (request, response) => {
+  const getById: RequestHandler = async (request, response) => {
     const { id } = ticketIdSchema.parse(request.params);
-    response.status(200).json(service.getTicketById(id));
+    response.status(200).json(await service.getTicketById(id));
   };
 
-  const create: RequestHandler = (request, response) => {
+  const create: RequestHandler = async (request, response) => {
     const input = createTicketSchema.parse(request.body);
-    response.status(201).json(service.createTicket(input));
+    response.status(201).json(await service.createTicket(input));
   };
 
-  const update: RequestHandler = (request, response) => {
+  const update: RequestHandler = async (request, response) => {
     const { id } = ticketIdSchema.parse(request.params);
     const input = updateTicketSchema.parse(request.body);
-    response.status(200).json(service.updateTicket(id, input));
+    response.status(200).json(await service.updateTicket(id, input));
   };
 
-  const remove: RequestHandler = (request, response) => {
+  const remove: RequestHandler = async (request, response) => {
     const { id } = ticketIdSchema.parse(request.params);
-    service.deleteTicket(id);
+    await service.deleteTicket(id);
     response.status(204).send();
   };
 

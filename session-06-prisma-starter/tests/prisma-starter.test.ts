@@ -28,7 +28,7 @@ describe("Prisma instructor solution", () => {
     expect(config).toContain('schema: "prisma/schema.prisma"');
     expect(config).toContain('process.env["DATABASE_URL"]');
     expect(example).toContain("DATABASE_URL=");
-    expect(example).toContain("session_06_training");
+    expect(example).toContain("session_06_instructor_training");
     expect(gitignore).toMatch(/^\.env$/m);
   });
 
