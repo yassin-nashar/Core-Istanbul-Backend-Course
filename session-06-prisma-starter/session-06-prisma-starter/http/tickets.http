@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:3000
+@ticketId = replace-with-created-ticket-id
+
+### Health
+GET {{baseUrl}}/health
+
+### List tickets
+GET {{baseUrl}}/api/tickets
+
+### Create a ticket
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Cannot sign in",
+  "description": "The login form rejects my password",
+  "priority": "high"
+}
+
+### Get one ticket
+GET {{baseUrl}}/api/tickets/{{ticketId}}
+
+### Update a ticket
+PATCH {{baseUrl}}/api/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "status": "in_progress"
+}
+
+### Delete a ticket
+DELETE {{baseUrl}}/api/tickets/{{ticketId}}
