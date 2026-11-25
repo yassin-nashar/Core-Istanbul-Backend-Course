@@ -1,0 +1,53 @@
+{
+  "info": { "name": "Session 7 - Secure Support Ticket API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json", "description": "Run Register, Login, then protected CRUD. Postman stores refresh cookies. For reuse testing save the old refresh_token cookie before Refresh, rotate once, restore the saved cookie in Cookie Manager, then run Reuse Rejection." },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "accessToken", "value": "" },
+    { "key": "userEmail", "value": "student@example.com" },
+    { "key": "userPassword", "value": "ExampleStrongPassword123" },
+    { "key": "ticketId", "value": "" }
+  ],
+  "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        { "name": "1 Register", "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Example User\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}" }, "url": "{{baseUrl}}/api/auth/register" } },
+        { "name": "2 Login", "event": [{ "listen": "test", "script": { "exec": ["const body = pm.response.json();", "if (body.accessToken) pm.collectionVariables.set('accessToken', body.accessToken);"] } }], "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}" }, "url": "{{baseUrl}}/api/auth/login" } },
+        { "name": "3 Refresh", "event": [{ "listen": "test", "script": { "exec": ["const body = pm.response.json();", "if (body.accessToken) pm.collectionVariables.set('accessToken', body.accessToken);"] } }], "request": { "auth": { "type": "noauth" }, "method": "POST", "url": "{{baseUrl}}/api/auth/refresh" } },
+        { "name": "4 Logout", "request": { "auth": { "type": "noauth" }, "method": "POST", "url": "{{baseUrl}}/api/auth/logout" } }
+      ]
+    },
+    {
+      "name": "Protected Ticket CRUD",
+      "item": [
+        { "name": "16 Get All Tickets", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+        { "name": "17 Get Ticket By ID", "request": { "method": "GET", "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } },
+        { "name": "18 Create Ticket", "event": [{ "listen": "test", "script": { "exec": ["const body = pm.response.json();", "if (body.id) pm.collectionVariables.set('ticketId', body.id);"] } }], "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"title\": \"Cannot sign in\",\n  \"description\": \"Valid password is rejected\",\n  \"priority\": \"high\"\n}" }, "url": "{{baseUrl}}/api/tickets" } },
+        { "name": "19 Update Ticket", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"status\": \"resolved\"\n}" }, "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } },
+        { "name": "20 Delete Ticket", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/tickets/{{ticketId}}" } }
+      ]
+    },
+    {
+      "name": "Authentication Error Cases",
+      "item": [
+        { "name": "5 Duplicate Registration", "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Duplicate\",\"email\":\"{{userEmail}}\",\"password\":\"{{userPassword}}\"}" }, "url": "{{baseUrl}}/api/auth/register" } },
+        { "name": "6 Invalid Registration", "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"\",\"email\":\"bad\",\"password\":\"short\"}" }, "url": "{{baseUrl}}/api/auth/register" } },
+        { "name": "7 Invalid Login", "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"{{userEmail}}\",\"password\":\"wrong-password\"}" }, "url": "{{baseUrl}}/api/auth/login" } },
+        { "name": "8 Ticket Without Token", "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+        { "name": "9 Ticket With Invalid Token", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "invalid.token.value", "type": "string" }] }, "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+        { "name": "10 Ticket With Expired Token", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "PASTE_TEST_ONLY_EXPIRED_TOKEN", "type": "string" }] }, "method": "GET", "description": "Generate only in an isolated test configuration with a short ACCESS_TOKEN_TTL.", "url": "{{baseUrl}}/api/tickets" } }
+      ]
+    },
+    {
+      "name": "Refresh Token Lifecycle",
+      "item": [
+        { "name": "11 Successful Refresh", "request": { "auth": { "type": "noauth" }, "method": "POST", "url": "{{baseUrl}}/api/auth/refresh" } },
+        { "name": "12 Rotation", "request": { "auth": { "type": "noauth" }, "method": "POST", "description": "Run twice after login; each success replaces the cookie.", "url": "{{baseUrl}}/api/auth/refresh" } },
+        { "name": "13 Reuse Rejection", "request": { "auth": { "type": "noauth" }, "method": "POST", "description": "Restore a cookie saved before rotation, then run; expect 401 and family revocation.", "url": "{{baseUrl}}/api/auth/refresh" } },
+        { "name": "14 Expired Refresh Rejection", "request": { "auth": { "type": "noauth" }, "method": "POST", "description": "Use an isolated test database and short refresh TTL; expect 401.", "url": "{{baseUrl}}/api/auth/refresh" } },
+        { "name": "15 Refresh After Logout", "request": { "auth": { "type": "noauth" }, "method": "POST", "description": "Run Logout first, restore its old cookie if needed, then expect 401.", "url": "{{baseUrl}}/api/auth/refresh" } }
+      ]
+    }
+  ]
+}
