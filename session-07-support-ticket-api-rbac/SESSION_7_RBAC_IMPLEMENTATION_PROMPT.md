@@ -1,0 +1,15 @@
+# Reusable implementation prompt — RBAC and Resource Ownership
+
+Act as a senior backend developer and technical instructor. Extend an existing authenticated Support Ticket API into a complete teaching reference for role-based access control and resource ownership. Preserve Node.js, Express, strict TypeScript/ESM, PostgreSQL, Prisma, Zod, routes/controllers/services/middleware, registration, Argon2id passwords, JWT access tokens, refresh rotation/reuse detection, cookies, logout, validation, and error conventions.
+
+Add a Prisma `UserRole` enum with `USER` and `ADMIN`; USER is the default. Public registration must always create USER and must ignore/reject client role assignment. Authentication must load trusted current role information from the database. Create reusable role middleware, run authentication before authorization, return 401 for invalid identity and 403 for a known user lacking a route role, and fail closed for unsupported roles.
+
+Add a required indexed Ticket owner relation to User. Derive owner only from authenticated identity; never accept ownership from create/update input. Preserve existing Ticket fields and rules. Use a dedicated database. Make migrations additive and non-destructive; if legacy tickets need ownership, require an explicit reviewed backfill instead of deleting or arbitrarily reassigning records.
+
+Enforce this policy: USER creates own tickets, lists/views/updates own tickets only, and cannot delete; ADMIN creates own tickets, lists/views/updates/deletes all tickets. All Ticket endpoints require authentication. Apply role middleware to route-level restrictions and resource ownership inside services. Put ownership predicates in database update queries rather than relying on a separate check. Return 404 for another user's resource and 403 when USER deletes. Preserve endpoints and unexpected-role fail-closed behavior.
+
+Create a repeatable non-destructive seed with one ADMIN, two USER accounts, at least five varied tickets per USER, existing password hashing, and documented development credentials. Preserve auth tests and add isolated-database tests for registration default role, self-escalation prevention, 401/403/404 behavior, own/cross-user create/list/view/update, ownership immutability, USER delete denial, ADMIN access, current database roles, refresh rotation, and logout.
+
+Provide an importable classroom Postman collection with Authentication, USER 1, USER 2, ADMIN, Authorization Tests, and Resource Ownership Tests folders, token variables/scripts, ticket IDs, and expected statuses. Write a complete README and concise SOLUTION_GUIDE explaining RBAC, middleware ordering, service ownership, database predicates, authentication versus authorization, migration safety, commands, seed accounts, API, and changes from the authentication project.
+
+Do not add dynamic permission management, CORS lessons, injection/XSS/CSRF demonstrations, Helmet, rate limiting, Firebase/Supabase authentication, a frontend, starter version, secrets, or unfinished TODOs. Deliver readable, secure, fully tested educational code.

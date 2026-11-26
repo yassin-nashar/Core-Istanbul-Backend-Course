@@ -1,0 +1,42 @@
+{
+  "info": { "name": "Session 7 - RBAC and Resource Ownership", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json", "description": "Seed first. Login scripts capture three access tokens. Requests document expected 200/201/204/401/403/404 outcomes." },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "password", "value": "ClassroomPassword123" },
+    { "key": "user1Token", "value": "" }, { "key": "user2Token", "value": "" }, { "key": "adminToken", "value": "" },
+    { "key": "user1TicketId", "value": "" }, { "key": "user2TicketId", "value": "" }, { "key": "adminDeleteTicketId", "value": "" }
+  ],
+  "event": [{ "listen": "test", "script": { "exec": ["const match = pm.info.requestName.match(/\\((\\d{3})\\)$/);", "if (match) pm.test(`returns ${match[1]}`, () => pm.response.to.have.status(Number(match[1])));"] } }],
+  "item": [
+    { "name": "Authentication", "item": [
+      { "name": "Register always as USER (201)", "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Public User\",\"email\":\"public@example.com\",\"password\":\"{{password}}\",\"role\":\"ADMIN\"}" }, "url": "{{baseUrl}}/api/auth/register" } },
+      { "name": "Login USER 1", "event": [{ "listen": "test", "script": { "exec": ["const b=pm.response.json(); if(b.accessToken) pm.collectionVariables.set('user1Token',b.accessToken);"] } }], "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"user1@example.com\",\"password\":\"{{password}}\"}" }, "url": "{{baseUrl}}/api/auth/login" } },
+      { "name": "Login USER 2", "event": [{ "listen": "test", "script": { "exec": ["const b=pm.response.json(); if(b.accessToken) pm.collectionVariables.set('user2Token',b.accessToken);"] } }], "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"user2@example.com\",\"password\":\"{{password}}\"}" }, "url": "{{baseUrl}}/api/auth/login" } },
+      { "name": "Login ADMIN", "event": [{ "listen": "test", "script": { "exec": ["const b=pm.response.json(); if(b.accessToken) pm.collectionVariables.set('adminToken',b.accessToken);"] } }], "request": { "auth": { "type": "noauth" }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"admin@example.com\",\"password\":\"{{password}}\"}" }, "url": "{{baseUrl}}/api/auth/login" } }
+    ]},
+    { "name": "USER 1", "item": [
+      { "name": "Create own ticket (201)", "event": [{ "listen": "test", "script": { "exec": ["const b=pm.response.json(); if(b.id) pm.collectionVariables.set('user1TicketId',b.id);"] } }], "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user1Token}}", "type": "string" }] }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"USER 1 ticket\",\"description\":\"Owned by authenticated USER 1\"}" }, "url": "{{baseUrl}}/api/tickets" } },
+      { "name": "List own tickets (200)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user1Token}}", "type": "string" }] }, "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+      { "name": "Update own ticket (200)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user1Token}}", "type": "string" }] }, "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"status\":\"resolved\"}" }, "url": "{{baseUrl}}/api/tickets/{{user1TicketId}}" } }
+    ]},
+    { "name": "USER 2", "item": [
+      { "name": "Create own ticket (201)", "event": [{ "listen": "test", "script": { "exec": ["const b=pm.response.json(); if(b.id) pm.collectionVariables.set('user2TicketId',b.id);"] } }], "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user2Token}}", "type": "string" }] }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"USER 2 ticket\",\"description\":\"Owned by authenticated USER 2\"}" }, "url": "{{baseUrl}}/api/tickets" } },
+      { "name": "List own tickets (200)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user2Token}}", "type": "string" }] }, "method": "GET", "url": "{{baseUrl}}/api/tickets" } }
+    ]},
+    { "name": "ADMIN", "item": [
+      { "name": "List all tickets (200)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] }, "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+      { "name": "View USER 1 ticket (200)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] }, "method": "GET", "url": "{{baseUrl}}/api/tickets/{{user1TicketId}}" } },
+      { "name": "Update USER 2 ticket (200)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] }, "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"priority\":\"high\"}" }, "url": "{{baseUrl}}/api/tickets/{{user2TicketId}}" } },
+      { "name": "Create disposable ADMIN ticket (201)", "event": [{ "listen": "test", "script": { "exec": ["const b=pm.response.json(); if(b.id) pm.collectionVariables.set('adminDeleteTicketId',b.id);"] } }], "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] }, "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Disposable ADMIN ticket\",\"description\":\"Used only for delete demonstration\"}" }, "url": "{{baseUrl}}/api/tickets" } },
+      { "name": "Delete disposable ticket (204)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] }, "method": "DELETE", "url": "{{baseUrl}}/api/tickets/{{adminDeleteTicketId}}" } }
+    ]},
+    { "name": "Authorization Tests", "item": [
+      { "name": "No token (401)", "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{baseUrl}}/api/tickets" } },
+      { "name": "USER delete own ticket (403)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user1Token}}", "type": "string" }] }, "method": "DELETE", "url": "{{baseUrl}}/api/tickets/{{user1TicketId}}" } }
+    ]},
+    { "name": "Resource Ownership Tests", "item": [
+      { "name": "USER 1 views USER 2 ticket (404)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user1Token}}", "type": "string" }] }, "method": "GET", "url": "{{baseUrl}}/api/tickets/{{user2TicketId}}" } },
+      { "name": "USER 1 updates USER 2 ticket (404)", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{user1Token}}", "type": "string" }] }, "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"status\":\"resolved\",\"ownerId\":\"ignored\"}" }, "url": "{{baseUrl}}/api/tickets/{{user2TicketId}}" } }
+    ]}
+  ]
+}
