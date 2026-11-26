@@ -1,0 +1,2 @@
+import{Router}from"express";import{authenticate}from"../middleware/auth.middleware.js";import{authorizeRoles}from"../middleware/authorize.middleware.js";import{listEvents,getEvent,createEvent,updateEvent,deleteEvent}from"../controllers/event.controller.js";
+export const eventRouter=Router();eventRouter.get("/",listEvents);eventRouter.get("/:id",getEvent);eventRouter.post("/",authenticate,authorizeRoles("ADMIN"),createEvent);eventRouter.patch("/:id",authenticate,authorizeRoles("ADMIN"),updateEvent);eventRouter.delete("/:id",authenticate,authorizeRoles("ADMIN"),deleteEvent);

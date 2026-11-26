@@ -1,0 +1,1 @@
+import{readFile}from"node:fs/promises";import{describe,it,expect}from"vitest";describe("schema",()=>{it("defines events and unique bookings",async()=>{const s=await readFile("prisma/schema.prisma","utf8");expect(s).toContain("model Event");expect(s).toContain("model Booking");expect(s).toContain("@@unique([userId, eventId])")})});

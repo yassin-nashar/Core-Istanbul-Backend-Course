@@ -1,0 +1,2 @@
+import{Router}from"express";import{authenticate}from"../middleware/auth.middleware.js";import{listBookings,getBooking,createBooking,deleteBooking}from"../controllers/booking.controller.js";
+export const bookingRouter=Router();bookingRouter.use(authenticate);bookingRouter.get("/",listBookings);bookingRouter.get("/:id",getBooking);bookingRouter.post("/",createBooking);bookingRouter.delete("/:id",deleteBooking);

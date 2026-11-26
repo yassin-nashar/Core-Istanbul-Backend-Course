@@ -1,0 +1,2 @@
+import{Router}from"express";import{authenticate}from"../middleware/auth.middleware.js";import{listEvents,getEvent,createEvent,updateEvent,deleteEvent}from"../controllers/event.controller.js";
+export const eventRouter=Router();eventRouter.get("/",listEvents);eventRouter.get("/:id",getEvent);eventRouter.post("/",authenticate,createEvent);eventRouter.patch("/:id",authenticate,updateEvent);eventRouter.delete("/:id",authenticate,deleteEvent);

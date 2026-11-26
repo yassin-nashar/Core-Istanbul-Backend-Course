@@ -1,0 +1,33 @@
+{
+  "info":{"name":"Event Booking Solution Security Verification","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable":[{"key":"token","value":""},{"key":"refreshToken","value":""},{"key":"eventId","value":""},{"key":"bookingId","value":""},{"key":"otherBookingId","value":""}],
+  "item":[
+    {"name":"Authentication","item":[
+      {"name":"Register","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"name\":\"Student\",\"email\":\"student@example.com\",\"password\":\"ClassroomPassword123\"}"},"url":"{{baseUrl}}/api/auth/register"}},
+      {"name":"Login","event":[{"listen":"test","script":{"exec":["pm.test('login succeeds',()=>pm.response.to.have.status(200)); const b=pm.response.json(); pm.collectionVariables.set('token',b.accessToken); pm.collectionVariables.set('refreshToken',b.refreshToken);"]}}],"request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"email\":\"{{email}}\",\"password\":\"{{password}}\"}"},"url":"{{baseUrl}}/api/auth/login"}},
+      {"name":"Refresh","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"refreshToken\":\"{{refreshToken}}\"}"},"url":"{{baseUrl}}/api/auth/refresh"}},
+      {"name":"Logout","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"refreshToken\":\"{{refreshToken}}\"}"},"url":"{{baseUrl}}/api/auth/logout"}}
+    ]},
+    {"name":"Events","item":[
+      {"name":"List","request":{"method":"GET","url":"{{baseUrl}}/api/events"}},
+      {"name":"Get One","request":{"method":"GET","url":"{{baseUrl}}/api/events/{{eventId}}"}},
+      {"name":"Create (ADMIN)","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"title\":\"Demo\",\"description\":\"Class demo\",\"location\":\"Room A\",\"eventDate\":\"2030-01-01T10:00:00.000Z\"}"},"url":"{{baseUrl}}/api/events"}},
+      {"name":"Update (ADMIN)","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"title\":\"Updated demo\"}"},"url":"{{baseUrl}}/api/events/{{eventId}}"}},
+      {"name":"Delete (ADMIN)","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"DELETE","url":"{{baseUrl}}/api/events/{{eventId}}"}}
+    ]},
+    {"name":"Bookings","item":[
+      {"name":"Create","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"eventId\":\"{{eventId}}\"}"},"url":"{{baseUrl}}/api/bookings"}},
+      {"name":"List","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/bookings"}},
+      {"name":"Get One","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/bookings/{{bookingId}}"}},
+      {"name":"Cancel","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"DELETE","url":"{{baseUrl}}/api/bookings/{{bookingId}}"}}
+    ]},
+    {"name":"Profile","item":[{"name":"My Profile","event":[{"listen":"test","script":{"exec":["pm.test('profile is safe',()=>{pm.response.to.have.status(200); pm.expect(pm.response.json()).not.to.have.property('passwordHash');});"]}}],"request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/users/me"}}]},
+    {"name":"Security Verification","item":[
+      {"name":"Profile without token returns 401","event":[{"listen":"test","script":{"exec":["pm.test('401',()=>pm.response.to.have.status(401));"]}}],"request":{"method":"GET","url":"{{baseUrl}}/api/users/me"}},
+      {"name":"Invalid JWT returns 401","event":[{"listen":"test","script":{"exec":["pm.test('401',()=>pm.response.to.have.status(401));"]}}],"request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"modified.token.value","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/bookings"}},
+      {"name":"USER cannot create event","event":[{"listen":"test","script":{"exec":["pm.test('403',()=>pm.response.to.have.status(403));"]}}],"request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"title\":\"Forbidden\",\"description\":\"D\",\"location\":\"L\",\"eventDate\":\"2030-01-01T10:00:00.000Z\"}"},"url":"{{baseUrl}}/api/events"}},
+      {"name":"Cross-user booking is hidden","event":[{"listen":"test","script":{"exec":["pm.test('404',()=>pm.response.to.have.status(404));"]}}],"request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/bookings/{{otherBookingId}}"}},
+      {"name":"Helmet headers present","event":[{"listen":"test","script":{"exec":["pm.test('nosniff',()=>pm.expect(pm.response.headers.get('X-Content-Type-Options')).to.eql('nosniff'));"]}}],"request":{"method":"GET","url":"{{baseUrl}}/api/events"}}
+    ]}
+  ]
+}

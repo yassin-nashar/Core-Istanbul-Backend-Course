@@ -1,0 +1,8 @@
+import"dotenv/config";import{PrismaPg}from"@prisma/adapter-pg";import{PrismaClient,UserRole}from"../src/generated/prisma/client.js";import{hashPassword}from"../src/lib/password.js";import pg from"pg";
+const pool=new pg.Pool({connectionString:process.env.DATABASE_URL});const db=new PrismaClient({adapter:new PrismaPg(pool)});const passwordHash=await hashPassword("ClassroomPassword123");
+const upsert=(name:string,email:string,role:UserRole)=>db.user.upsert({where:{email},update:{name,role,passwordHash},create:{name,email,role,passwordHash}});
+const admin=await upsert("Course Admin","admin@example.com",UserRole.ADMIN),u1=await upsert("User One","user1@example.com",UserRole.USER),u2=await upsert("User Two","user2@example.com",UserRole.USER);
+const data=[["AI Workshop","Hands-on AI development","Istanbul",1],["Security Review","Backend security lab","Room A",2],["TypeScript Day","Strict TypeScript patterns","Room B",3],["Prisma Lab","Database modeling","Lab 1",4],["API Design","REST API practices","Room C",5]] as const;const events=[];
+for(const[title,description,location,days]of data){const eventDate=new Date(Date.now()+days*86400000);let event=await db.event.findFirst({where:{title}});event=event?await db.event.update({where:{id:event.id},data:{description,location,eventDate}}):await db.event.create({data:{title,description,location,eventDate}});events.push(event)}
+for(const[user,event]of[[u1,events[0]!],[u1,events[1]!],[u2,events[1]!],[u2,events[2]!]]as const)await db.booking.upsert({where:{userId_eventId:{userId:user.id,eventId:event.id}},update:{},create:{userId:user.id,eventId:event.id}});
+console.log(`Seeded ${admin.email}, ${u1.email}, ${u2.email}, ${events.length} events`);await db.$disconnect();await pool.end();

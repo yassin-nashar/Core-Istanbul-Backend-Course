@@ -1,0 +1,26 @@
+{
+  "info": {"name": "Event Booking Security Audit", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json", "description": "Student business-flow collection. Investigate the seven categories listed in README."},
+  "variable": [{"key":"token","value":""},{"key":"refreshToken","value":""},{"key":"eventId","value":""},{"key":"bookingId","value":""}],
+  "item": [
+    {"name":"Authentication","item":[
+      {"name":"Register","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"name\":\"Student\",\"email\":\"student@example.com\",\"password\":\"ClassroomPassword123\"}"},"url":"{{baseUrl}}/api/auth/register"}},
+      {"name":"Login","event":[{"listen":"test","script":{"exec":["const b=pm.response.json(); if(b.accessToken) pm.collectionVariables.set('token',b.accessToken); if(b.refreshToken) pm.collectionVariables.set('refreshToken',b.refreshToken);"]}}],"request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"email\":\"{{email}}\",\"password\":\"{{password}}\"}"},"url":"{{baseUrl}}/api/auth/login"}},
+      {"name":"Refresh","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"refreshToken\":\"{{refreshToken}}\"}"},"url":"{{baseUrl}}/api/auth/refresh"}},
+      {"name":"Logout","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"refreshToken\":\"{{refreshToken}}\"}"},"url":"{{baseUrl}}/api/auth/logout"}}
+    ]},
+    {"name":"Events","item":[
+      {"name":"List","request":{"method":"GET","url":"{{baseUrl}}/api/events"}},
+      {"name":"Get One","request":{"method":"GET","url":"{{baseUrl}}/api/events/{{eventId}}"}},
+      {"name":"Create","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"title\":\"Workshop\",\"description\":\"Security workshop\",\"location\":\"Room 1\",\"eventDate\":\"2030-01-01T10:00:00.000Z\"}"},"url":"{{baseUrl}}/api/events"}},
+      {"name":"Update","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"title\":\"Updated workshop\"}"},"url":"{{baseUrl}}/api/events/{{eventId}}"}},
+      {"name":"Delete","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"DELETE","url":"{{baseUrl}}/api/events/{{eventId}}"}}
+    ]},
+    {"name":"Bookings","item":[
+      {"name":"Create","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"eventId\":\"{{eventId}}\"}"},"url":"{{baseUrl}}/api/bookings"}},
+      {"name":"List","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/bookings"}},
+      {"name":"Get One","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/bookings/{{bookingId}}"}},
+      {"name":"Cancel","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"DELETE","url":"{{baseUrl}}/api/bookings/{{bookingId}}"}}
+    ]},
+    {"name":"Profile","item":[{"name":"My Profile","request":{"auth":{"type":"bearer","bearer":[{"key":"token","value":"{{token}}","type":"string"}]},"method":"GET","url":"{{baseUrl}}/api/users/me"}}]}
+  ]
+}

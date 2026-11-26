@@ -1,0 +1,3 @@
+# Reusable build prompt
+
+Build a local-only Event Booking security-audit exercise and matching secure instructor solution using Express, strict TypeScript/ESM, PostgreSQL, Prisma, Zod, JWT, and Argon2id. Preserve identical models/endpoints/business behavior. The corrected project must enforce guest event reads, ADMIN event mutation, authenticated own booking creation, USER own-booking access, ADMIN all-booking access, safe profile selection, verified HS256 JWT claims, rotating hashed refresh tokens, Helmet, and configurable general/auth rate limits. Provide isolated databases, migrations, repeatable seed, tests, Postman, README, and an instructor comparison guide. Avoid unrelated security exercises, frontend, secrets, and unfinished TODOs.
